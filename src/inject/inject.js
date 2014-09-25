@@ -1,10 +1,14 @@
 var tooltips = [];
 
+/**
+ * Success handler for AJAX call
+ * Adds the new watch into Local Storage
+ * @param {JSON}
+ * @returns {void}
+ */	
 function successHandler(data){
-	
 	var localKeys;
 	chrome.extension.sendMessage({method: "getLocalStorage"}, function(response){
-		
 		localKeys = response.keys;
 
 		if(localKeys == null){
@@ -22,67 +26,71 @@ function successHandler(data){
 		chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(localKeys)}, function(response){});
 	});
 }
-	
-function sectionsHaveLoaded(num){
+/**
+ * Inserts "WATCH" header with Eye Icon into Rutgers course page
+ * @returns {void}
+ */	
+function sectionsHaveLoaded(){
 	var count = 0;
-	//iterates through each section
 	$("<span>WATCH</span>").insertAfter(".indexNumberColumnHeader");
-	$("div.sectionHeaders span").css( 'padding-right', '0px' )
-    $( ".sectionData" ).each(function() {
-		// Not getting rid of old initiations and not making new ones 
-		//appendString is a jQuery object
+	$("div.sectionHeaders span").css('padding-right', '0px');
+
+    $( ".sectionData" ).each(function(){
 		var appendString = $('<div style="display: inline-block" id="snipe" count="'+count+'"><img src="'+chrome.extension.getURL('/icons/eyecon.png')+' " style="cursor:pointer")></div>');			
-		appendString.insertAfter($(this).find('.sectionIndexNumber'));
-		
 		var email = localStorage.getItem("email");
+
+		appendString.insertAfter($(this).find('.sectionIndexNumber'));
 		
 		if(email == null){
 			email = '';
 		}
 		
-		var formObject = $("<form id='emailForm'><div style='text-align:center'>Watch This Course</div> <br> Email: <input type='email' id='email' value='" + email + "'></input><button type='button' class='submitSnipe' count='"+count+"'>Watch!</button></form>");
+		var formObject = $("<form id='emailForm'><div style='text-align:center'>Watch This Course</div> <br> Email: <input type='email' id='email' value='" + email + "'></input><button type='button' class='submitSnipe' count='" + count + "'>Watch!</button></form>");
 
-		//initiates tooltip with appendString object
 		appendString.tooltipster({
-			triggger:'click',
+			triggger: 'click',
 			interactive: 'true',
         	content: formObject
     	});
+
     	tooltips.push(appendString);
     	count = count + 1;
 	});
 	
-	//preps for changing department
-	$("#numCoursesFoundDivSpan").attr('id','');
+	$("#numCoursesFoundDivSpan").attr('id',''); //preps for changing department
 	
-	//When they submit the form
+	/**
+	 * Click handler for Tooltip
+	 * Posts course data to database via Old Scarf Labs API
+	 * Saves email in Local Storage
+	 * @returns {void}
+	 */
 	$('html').on('click', '.submitSnipe', function(){
-		//find out which section they want
 		var number = $(this).attr('count');
-		var snipe = $('#snipe[count="'+number+'"]');
+		var snipe = $('#snipe[count="' + number + '"]');
 		var email = $("#email").val();
-		
-		localStorage.setItem("email",email);
-		
 		var sectionData = snipe.closest(".sectionData").attr('id');
-		
 		var res = sectionData.split(".");
-		
 		var courseNumber = res[0];
 		var sectionNumber = res[2].replace('section', '');
-		
 		var deptAndCourseNums = courseNumber.split(':');
 		var departmentNum = deptAndCourseNums[1];
 		var courseNum = deptAndCourseNums[2];			
-		
 		var index = snipe.prev().text();
 		var title = snipe.closest('.courseData').siblings('.courseInfo').children('.courseTitleAndCredits').children('.courseTitle').children('.highlighttext').text();
+		
 		var postData = {"DepartmentNumber": departmentNum,  "CourseNumber": courseNum,  "Email":email, "SectionNumber": sectionNumber, "Index": index, "Title" : title};
 		
+		localStorage.setItem("email",email);
+
+		/**
+		 * AJAX call to Old Scarf Labs API to add a "watch" on a course
+		 * @returns {JSON}
+		 */
 		$.ajax({
-			type:"POST",
-			url:"http://aaronrosenheck.com/coursewatcher/addSnipe.php",
-			data:postData,
+			type: "POST",
+			url: "http://aaronrosenheck.com/coursewatcher/addSnipe.php",
+			data: postData,
 			success: function(data){ 
 				successHandler(data);
 			},
@@ -92,11 +100,8 @@ function sectionsHaveLoaded(num){
 			}
 		});
 		
-		
-		
 		var changeTooltip = tooltips[parseInt(number)];
 		changeTooltip.tooltipster('content', 'You are watching this course!');
-		
 	});
 	/*$('.input').keypress(function(e) {
     	if(e.which == 13) {
@@ -108,31 +113,28 @@ function sectionsHaveLoaded(num){
 
 
 
-//when they change department
+/**
+ * Checks for a change of department
+ * Sets an 0.01 second interval to check for loaded sections
+ * @return {void}
+*/
 window.onhashchange = function () {
 	setInterval(function() {
 		if($("#numCoursesFoundDivSpan").length > 0){
-			sectionsHaveLoaded(1);
+			sectionsHaveLoaded();
 			return;
 		}
 	},10);
 }
 
-//Runs on initial load
+/**
+ * Sets an 0.01 second interval to check for loaded sections
+ * @return {void}
+*/
 var p = setInterval(function() {
 	if($("#numCoursesFoundDivSpan").length > 0){
 			tooltips=[];
-			sectionsHaveLoaded(0);
+			sectionsHaveLoaded();
 			return;
 	}
 },10);
-	
-
-
-
-
-
-
-
-
-	
