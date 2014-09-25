@@ -1,12 +1,13 @@
+/**
+ * Sends a message to background.js to access previousKeys in Local Storage
+ * Displays these courses in the "Previous" section of the dialog dropdown
+ */
 chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(response){ 
-		
 		var listOfIds = [];
-		
 		localKeys = response.previouskeys;
-			
 		localKeys = JSON.parse(localKeys);
-		
 		var subKeys = localKeys['keys'];
+
 		for(var i = 0; i< subKeys.length; i++){
 			var course = subKeys[i];
 			var department = course['department'];
@@ -32,6 +33,7 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 			$('.course-table').append(appendRow);
 	}
 	
+	//MUST BE IMPLEMENTED
 	$("#addwatch").on('click', function(){
 		//find watch id in local storage. move it back into real local storage
 		//change back to 0 in database with ajax call
@@ -41,6 +43,5 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 				//nothing was here...
 			}
 		}
-	}); 
-	
+	});
 });
