@@ -1,0 +1,42 @@
+{ 
+  "name": "Course Watcher",
+  "version": "0.0.2",
+  "author": "Old Scarf Labs",
+  "manifest_version": 2,
+  "description": "Adds a sniper icon to quickly add a course to be sniped.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "default_locale": "en",
+  "background": { 
+    "page": "src/bg/background.html",
+    "persistent": true
+  }, 
+  "browser_action": {
+    "default_icon": "icons/icon48.png",
+    "default_title": "page action demo",
+    "default_popup": "src/page_action/page_action.html"
+  }, 
+  "permissions": [
+    "http://sis.rutgers.edu/soc/*",
+    "https://sis.rutgers.edu/soc/*",
+    "tabs",
+    "storage"
+  ], 
+  "web_accessible_resources": [
+    "/icons/eyecon.png"
+  ], 
+  "content_scripts": [ 
+    {
+      "matches": [
+        "https://sis.rutgers.edu/soc/*",
+        "http://sis.rutgers.edu/soc/*"
+      ],
+      "css": [
+        "src/inject/inject.css", "css/tooltipster-light.css", "css/tooltipster.css"
+      ]
+    }
+  ]
+}
