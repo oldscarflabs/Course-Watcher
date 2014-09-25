@@ -1,19 +1,24 @@
-
+/**
+ * Uses data from Rutgers API to check if each class is open
+ * Changes loading animation to red/green
+ * @param {JSON}
+ * @param {string}
+ */	
 function successHandler(data, url){
 	var start = url.indexOf("courseNumber");
 	var sub = url.substring(start).split('&');
 	var courseNumber = sub[0].substring(sub[0].indexOf("=")+1);
 	var sectionNumber = sub[1].substring(sub[1].indexOf("=")+1);
-	
 	var department = data[0]['subject'];
-	
 	var course;
+
 	for(var i =0; i < data.length; i++){
 		course = data[i];
 		if(course['courseNumber'] == courseNumber){
 			break;	
 		}
 	}
+
 	var sections = course['sections'];
 	for(var j = 0; j< sections.length; j++){
 		section = sections[j];
@@ -21,6 +26,7 @@ function successHandler(data, url){
 			break;
 		}
 	}
+
 	var isOpen = section['openStatus'];
 	var tag = "." + department + "_" + courseNumber + "_" + sectionNumber;
 
@@ -39,20 +45,15 @@ function successHandler(data, url){
 	});
 }
 
+/**
+ * Moves a course from 'keys' to 'previousKeys' in Local Storage
+ * @param {JSON}
+ */	
 function deleteFromLocalStorage(data){
-	var goodCourses = {
-		"keys": [
-						
-		] 
-	}
-	var badCourses = {		
-		"keys": [
-							
-		] 
-	}			
-	
+	var goodCourses = {"keys": []};
+	var badCourses = {"keys": []};
+
 	chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(responseA){
-	
 		if(responseA.previouskeys != null){
 			badCourses = JSON.parse(responseA.previouskeys);
 		}
@@ -60,8 +61,8 @@ function deleteFromLocalStorage(data){
 			var badIds = data['delete-ids'];
 			var courses = response.keys;
 			courses = JSON.parse(courses);
-			
 			courses2 = courses['keys'];
+
 			for(var i = 0; i < courses2.length; i++){
 				if(badIds.indexOf(String(courses2[i]['watch_id'])) == -1) {
 					goodCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'], 'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title':courses2[i]['title']});
@@ -77,40 +78,35 @@ function deleteFromLocalStorage(data){
 			chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(goodCourses)}, function(response){});
 			chrome.extension.sendMessage({method: "setPreviousLocalStorage", data: JSON.stringify(badCourses)}, function(response){});
 		});
-	
 	});
 }
 
-displayCourses();
 
-
+/**
+ * Displays list of courses in the dialog dropdown
+ * @returns {void}
+ */	
 function displayCourses(){
-	
 	var localKeys;
 	
-	chrome.extension.sendMessage({method: "getLocalStorage"}, function(response){ 
-		
+	chrome.extension.sendMessage({method: "getLocalStorage"}, function(response){ 	
 		var listOfIds = [];
-		
 		localKeys = response.keys;
-			
 		localKeys = JSON.parse(localKeys);
-		
 		var subKeys = localKeys['keys'];
-		for(var i = 0; i< subKeys.length; i++){
+		
+		for(var i = 0; i < subKeys.length; i++){
 			var course = subKeys[i];
 			var department = course['department'];
 			var courseNumber = course['course'];
 			var section = course['section'];
 			var index = course['index'];
-			 
-			listOfIds.push(course['watch_id']);
-			 
-			var courseTitle=course['title'];
-			 
 			var semester = '92014';
 			var campus = 'NB';
 			var level = 'U'	;
+			var courseTitle=course['title'];
+
+			listOfIds.push(course['watch_id']);
 			 
 			var appendRow =  "<tr><td id = '" + department + "_" + courseNumber + "_" + section + "' class='load-box'>" + "<div id='loadingGif"+department + 
 			"_" + courseNumber + "_" + section+"'> <img src='http://www.mytreedb.com/uploads/mytreedb/loader/ajax_loader_gray_512.gif' height='30px'> </div><div id='sectionNumber" +department + 
@@ -121,20 +117,21 @@ function displayCourses(){
 			
 			$('.course-table').append(appendRow);
 			
-			
-			//pass additional info in post so that on asynchronous susccess I can access data
 			var requestData = {'subject': department, 'semester': semester, 'campus': campus, 'level': level, 'courseNumber':courseNumber, 'section':section};
 			
-			//checks if coruses are open or not
+			/**
+			 * Ajax GET request to Rutgers API to get class information
+			 * Calls successHandler() on success, and logs information on failure
+			 */
 			$.ajax({
-				type:"GET",
-				url:'http://sis.rutgers.edu/soc/courses.json',
+				type: 'GET',
+				url: 'http://sis.rutgers.edu/soc/courses.json',
 				data: requestData,
 				success: function(data){ 
 					successHandler(data, this.url);
 				},
 				error: function(data){
-					console.log('failed');
+					console.log('AJAX GET request to Rutgers API has failed with data:');
 					console.log(data);
 				}
 			});
@@ -143,12 +140,14 @@ function displayCourses(){
 		
 		$('.course-table').append('<tr><td><img src="https://cdn1.iconfinder.com/data/icons/windows-8-metro-style/512/refresh.png" height="20px" style="padding:5px"></td><td><a href="previousWatches.html">View Old Watches</a></td><td colspan="2" style="text-align:left"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></td></tr>');
 		
+		var ids = {'watch-ids': JSON.stringify(listOfIds)}; //checks to see if the courses have been marked as watched in database
 		
-		//checks to see if the courses have been marked as watched in database
-		var ids = {'watch-ids': JSON.stringify(listOfIds)};		
+		/**
+		 * Ajax GET request to Old Scarf Labs API to sync the status of each course being watched
+		 * Calls deleteFromLocalStorage() on success, and logs information on failure
+		 */
 		$.ajax({
-				type:"GET",
-				//url:'http://69.114.127.1/syncStatus.php',
+				type: "GET",
 				url: 'http://aaronrosenheck.com/coursewatcher/syncStatus.php',
 				data: ids,
 				success: function(data){ 
@@ -158,10 +157,9 @@ function displayCourses(){
 					console.log('GET from Old Scarf Labs API has failed with response:');
 					console.log(data);
 			}
-		});
-		
-	});
-	
-	
+		});	
+	});	
 }
+
+displayCourses();
 
