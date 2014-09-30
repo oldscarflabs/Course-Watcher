@@ -1,4 +1,4 @@
-/**
+	/**
  * Sends a message to background.js to access previousKeys in Local Storage
  * Displays these courses in the "Previous" section of the dialog dropdown
  */
@@ -28,20 +28,68 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 			"_" + courseNumber + "_" + section+ "' '>" + section + "</div>" + "</td><td id='className'><div>" + 
 			courseTitle + "</div></td><td> <div id='number_"+ department + "_" + courseNumber + "_" + section +"'>"
 			+ department + ":" + courseNumber + "</div> <div id='register_" + department + "_" + courseNumber + "_" + section + "'style='display:none'><a class='register_"+ department + "_" + courseNumber + "_" + section +"' href='#' id='"+index+"'>REGISTER!</a></div>"
-			+"</td><td><div id='addwatch' class='"+ course['watch_id'] +"'><img src='../../icons/eyecon.png' height='10px'></td></tr>";
+			+"</td><td><div id='addwatch' class='"+ course['watch_id'] +"' style='cursor:pointer' ><img src='../../icons/eyecon.png' id='addwatch' height='10px'></div></td></tr>";
 			
 			$('.course-table').append(appendRow);
-	}
+		}
+
+
 	
 	//MUST BE IMPLEMENTED
 	$("#addwatch").on('click', function(){
 		//find watch id in local storage. move it back into real local storage
 		//change back to 0 in database with ajax call
-		for(var i =0; i<subKeys.length; i++){
-			var course = subKeys[i];
-			if(course['watch-id'] == this.class()){
-				//nothing was here...
+
+		var courses = response.previouskeys;
+		console.log(courses);
+		courses = JSON.parse(courses);
+		var goodCourses = {"keys": []};
+		var badCourses = {"keys": []};
+		var postData;
+
+		chrome.extension.sendMessage({method: "getLocalStorage"}, function(responseA){
+			if(responseA.previouskeys != null){
+				badCourses = JSON.parse(responseA.previouskeys);
+			}	
+		});
+		for(var i = 0; i < subKeys.length; i++){
+			if(subKeys[i]['watch_id'] == $(this).attr('class')) {
+				goodCourses['keys'].push({'watch_id': subKeys[i]['watch_id'], 'department': subKeys[i]['department'], 'course': subKeys[i]['course'], 'section': subKeys[i]['section'], 'index': subKeys[i]['index'], 'title':subKeys[i]['title']});
+				postData = {"watch_id": subKeys[i]['watch_id']};
+				console.log(subKeys[i]['watch_id']);
+			}    
+			else{
+				badCourses['keys'].push({'watch_id': subKeys[i]['watch_id'], 'department': subKeys[i]['department'], 'course': subKeys[i]['course'], 'section': subKeys[i]['section'], 'index': subKeys[i]['index'], 'title':subKeys[i]['title']});
 			}
 		}
+		chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(goodCourses)}, function(response){});
+		chrome.extension.sendMessage({method: "setPreviousLocalStorage", data: JSON.stringify(badCourses)}, function(response){});	
+		
+		/**
+	 	* AJAX call to Old Scarf Labs API to re-add a "watch" on a course
+		* @returns {JSON}
+		*/
+		$.ajax({
+			type: "POST",
+			url: "http://aaronrosenheck.com/coursewatcher/readdSnipe.php",
+			data: postData,
+			success: function(data){ 
+				console.log(data);
+				
+				//successHandler(data);
+			},
+			error: function(data){
+				console.log('POST to Old Scarf Lab API failed with data response:');
+				console.log(data);
+			}
+		});
+
 	});
+
 });
+
+
+
+		
+
+
