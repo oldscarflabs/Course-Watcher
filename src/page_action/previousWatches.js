@@ -27,7 +27,8 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 			var appendRow =  "<tr><td id = '" + department + "_" + courseNumber + "_" + section + "' class='load-box'><div id='sectionNumber" +department + 
 			"_" + courseNumber + "_" + section+ "' '>" + section + "</div>" + "</td><td id='className'><div>" + 
 			courseTitle + "</div></td><td> <div id='number_"+ department + "_" + courseNumber + "_" + section +"'>"
-			+ department + ":" + courseNumber + "</div> <div id='register_" + department + "_" + courseNumber + "_" + section + "'style='display:none'><a class='register_"+ department + "_" + courseNumber + "_" + section +"' href='#' id='"+index+"'>REGISTER!</a></div>"
+			+ department + ":" + courseNumber + "</div> <div id='register_" + department + "_" + courseNumber + "_" + section + "'style='display:none'><a class='register_"+
+			 department + "_" + courseNumber + "_" + section +"' href='#' id='"+index+"'>REGISTER!</a></div>"
 			+"</td><td><div id='addwatch' class='"+ course['watch_id'] +"' style='cursor:pointer' ><img src='../../icons/eyecon.png' id='addwatch' height='10px'></div></td></tr>";
 			
 			$('.course-table').append(appendRow);
@@ -46,7 +47,7 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 		var goodCourses = {"keys": []};
 		var badCourses = {"keys": []};
 		var postData;
-
+		var watchid = $(this).attr('class');
 		chrome.extension.sendMessage({method: "getLocalStorage"}, function(responseA){
 			if(responseA.previouskeys != null){
 				badCourses = JSON.parse(responseA.previouskeys);
@@ -66,16 +67,16 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 		chrome.extension.sendMessage({method: "setPreviousLocalStorage", data: JSON.stringify(badCourses)}, function(response){});	
 		
 		/**
-	 	* AJAX call to Old Scarf Labs API to re-add a "watch" on a course
-		* @returns {JSON}
-		*/
+	 	 * AJAX call to Old Scarf Labs API to re-add a "watch" on a course
+	 	 * @returns {JSON}
+		 */
 		$.ajax({
 			type: "POST",
 			url: "http://aaronrosenheck.com/coursewatcher/readdSnipe.php",
 			data: postData,
 			success: function(data){ 
 				console.log(data);
-				
+				$("." + watchid).replaceWith("<div><img src='http://img1.wikia.nocookie.net/__cb20131125154354/roblox/images/5/57/Very-Basic-Checkmark-icon.png' id='addwatch' height='15px'></div>");
 				//successHandler(data);
 			},
 			error: function(data){

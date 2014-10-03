@@ -1,3 +1,7 @@
+$.get( "http://wwwapps.ups.com/WebTracking/track", { track: "yes", trackNums: "1Z768V9YYN53212932", loc: "en_US" } )
+  .done(function( data ) {
+    console.log( data );
+  });
 /**
  * Uses data from Rutgers API to check if each class is open
  * Changes loading animation to red/green
@@ -138,7 +142,7 @@ function displayCourses(){
 		 
 		}
 		
-		$('.course-table').append('<tr><td><img src="https://cdn1.iconfinder.com/data/icons/windows-8-metro-style/512/refresh.png" height="20px" style="padding:5px"></td><td><a href="previousWatches.html">View Old Watches</a></td><td colspan="2" style="text-align:left"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></td></tr>');
+		$('.course-table').append('<tr><td><a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"></a></td><td></td><td colspan="2" style="text-align:left"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></td></tr>');
 		
 		var ids = {'watch-ids': JSON.stringify(listOfIds)}; //checks to see if the courses have been marked as watched in database
 		

@@ -36,7 +36,7 @@ function sectionsHaveLoaded(){
 	$("div.sectionHeaders span").css('padding-right', '0px');
 
     $( ".sectionData" ).each(function(){
-		var appendString = $('<div style="display: inline-block" id="snipe" count="'+count+'"><img src="'+chrome.extension.getURL('/icons/eyecon.png')+' " style="cursor:pointer")></div>');			
+		var appendString = $('<div style="display: inline-block" id="snipe" count="' + count + '"><img src="' + chrome.extension.getURL('/icons/eyecon.png') + ' " style="cursor:pointer")></div>');			
 		var email = localStorage.getItem("email");
 
 		appendString.insertAfter($(this).find('.sectionIndexNumber'));
