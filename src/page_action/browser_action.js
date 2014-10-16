@@ -1,7 +1,3 @@
-$.get( "http://wwwapps.ups.com/WebTracking/track", { track: "yes", trackNums: "1Z768V9YYN53212932", loc: "en_US" } )
-  .done(function( data ) {
-    console.log( data );
-  });
 /**
  * Uses data from Rutgers API to check if each class is open
  * Changes loading animation to red/green
@@ -152,7 +148,7 @@ function displayCourses(){
 		 */
 		$.ajax({
 				type: "GET",
-				url: 'http://aaronrosenheck.com/coursewatcher/syncStatus.php',
+				url: 'http://oldscarflabs.me/coursewatcher/syncStatus.php',
 				data: ids,
 				success: function(data){ 
 					deleteFromLocalStorage(data);
