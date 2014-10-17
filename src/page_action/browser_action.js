@@ -151,6 +151,7 @@ function displayCourses(){
 				url: 'https://oldscarflabs.me/coursewatcher/syncStatus.php',
 				data: ids,
 				success: function(data){ 
+					console.log(ids);
 					deleteFromLocalStorage(data);
 				},
 				error: function(data){

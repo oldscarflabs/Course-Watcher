@@ -49,6 +49,17 @@
 		border-left:1px solid black;
 		border-right:1px solid black;
 	}
+	.delete-box{
+		height: 35px;
+		width: 35px;
+		text-align: center;
+		font-family: helvetica;
+		font-size: 1em;
+		color: white;
+		font-weight: bold;
+		border-left:1px solid black;
+		border-right:1px sold #757575;
+	}
 	table, tr, td{
 		text-align: center;
 		border: none;

@@ -29,15 +29,13 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 			courseTitle + "</div></td><td> <div id='number_"+ department + "_" + courseNumber + "_" + section +"'>"
 			+ department + ":" + courseNumber + "</div> <div id='register_" + department + "_" + courseNumber + "_" + section + "'style='display:none'><a class='register_"+
 			 department + "_" + courseNumber + "_" + section +"' href='#' id='"+index+"'>REGISTER!</a></div>"
-			+"</td><td><div id='addwatch' class='"+ course['watch_id'] +"' style='cursor:pointer' ><img src='../../icons/eyecon.png' id='addwatch' height='10px'></div></td></tr>";
+			+"</td><td><div id='addwatch' clickFun = 'clickFun' class='"+ course['watch_id'] +"' style='cursor:pointer' ><img src='../../icons/eyecon.png' id='addwatch' height='10px'></div></td></tr>";
 			
 			$('.course-table').append(appendRow);
 		}
 
 
-	
-	//MUST BE IMPLEMENTED
-	$("#addwatch").on('click', function(){
+	$('[clickFun=clickFun]').on('click', function(){
 		//find watch id in local storage. move it back into real local storage
 		//change back to 0 in database with ajax call
 
@@ -48,11 +46,15 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 		var badCourses = {"keys": []};
 		var postData;
 		var watchid = $(this).attr('class');
-		chrome.extension.sendMessage({method: "getLocalStorage"}, function(responseA){
-			if(responseA.previouskeys != null){
-				badCourses = JSON.parse(responseA.previouskeys);
-			}	
-		});
+
+			
+		console.log(localStorage.getItem("keys"));
+
+		if(localStorage.getItem("keys") != null){
+			goodCourses = JSON.parse(localStorage.getItem("keys"));
+			console.log("adsadsff");
+		}
+
 		for(var i = 0; i < subKeys.length; i++){
 			if(subKeys[i]['watch_id'] == $(this).attr('class')) {
 				goodCourses['keys'].push({'watch_id': subKeys[i]['watch_id'], 'department': subKeys[i]['department'], 'course': subKeys[i]['course'], 'section': subKeys[i]['section'], 'index': subKeys[i]['index'], 'title':subKeys[i]['title']});
