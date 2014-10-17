@@ -89,7 +89,7 @@ function sectionsHaveLoaded(){
 		 */
 		$.ajax({
 			type: "POST",
-			url: "http://oldscarflabs.me/coursewatcher/addSnipe.php",
+			url: "https://oldscarflabs.me/coursewatcher/addSnipe.php",
 			data: postData,
 			success: function(data){ 
 				successHandler(data);

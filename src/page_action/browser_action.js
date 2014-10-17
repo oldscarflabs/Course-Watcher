@@ -148,7 +148,7 @@ function displayCourses(){
 		 */
 		$.ajax({
 				type: "GET",
-				url: 'http://oldscarflabs.me/coursewatcher/syncStatus.php',
+				url: 'https://oldscarflabs.me/coursewatcher/syncStatus.php',
 				data: ids,
 				success: function(data){ 
 					deleteFromLocalStorage(data);

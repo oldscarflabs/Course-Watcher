@@ -72,7 +72,7 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 		 */
 		$.ajax({
 			type: "POST",
-			url: "http://oldscarflabs.me/coursewatcher/readdSnipe.php",
+			url: "https://oldscarflabs.me/coursewatcher/readdSnipe.php",
 			data: postData,
 			success: function(data){ 
 				console.log(data);

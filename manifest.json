@@ -22,6 +22,7 @@
   "permissions": [
     "http://sis.rutgers.edu/soc/*",
     "https://sis.rutgers.edu/soc/*",
+    "https://oldscarflabs.me/*",
     "tabs",
     "storage"
   ], 
