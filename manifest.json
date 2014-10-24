@@ -1,4 +1,4 @@
-{ 
+{
   "name": "Course Watcher",
   "version": "0.0.2",
   "author": "Old Scarf Labs",
@@ -10,26 +10,26 @@
     "128": "icons/icon128.png"
   },
   "default_locale": "en",
-  "background": { 
+  "background": {
     "page": "src/bg/background.html",
     "persistent": true
-  }, 
+  },
   "browser_action": {
     "default_icon": "icons/icon48.png",
     "default_title": "page action demo",
-    "default_popup": "src/page_action/page_action.html"
-  }, 
+    "default_popup": "src/browser_action/browser_action.html"
+  },
   "permissions": [
     "http://sis.rutgers.edu/soc/*",
     "https://sis.rutgers.edu/soc/*",
     "https://oldscarflabs.me/*",
     "tabs",
     "storage"
-  ], 
+  ],
   "web_accessible_resources": [
     "/icons/eyecon.png"
-  ], 
-  "content_scripts": [ 
+  ],
+  "content_scripts": [
     {
       "matches": [
         "https://sis.rutgers.edu/soc/*",
