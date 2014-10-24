@@ -49,11 +49,8 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 
 		var badLocalStorage = JSON.parse(localStorage.getItem("previouskeys"))['keys'];
 
-		//console.log(badLocalStorage);
-
 		if(localStorage.getItem("keys") != null){
 			goodCourses = JSON.parse(localStorage.getItem("keys"));
-			//console.log("adsadsff");
 		}
 
 
@@ -61,7 +58,6 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 			if(badLocalStorage[i]['watch_id'] == $(this).attr('class')) {
 				goodCourses['keys'].push({'watch_id': badLocalStorage[i]['watch_id'], 'department': badLocalStorage[i]['department'], 'course': badLocalStorage[i]['course'], 'section': badLocalStorage[i]['section'], 'index': badLocalStorage[i]['index'], 'title':badLocalStorage[i]['title']});
 				postData = {"watch_id": badLocalStorage[i]['watch_id']};
-				//console.log(subKeys[i]['watch_id']);
 			}
 			else{
 				badCourses['keys'].push({'watch_id': badLocalStorage[i]['watch_id'], 'department': badLocalStorage[i]['department'], 'course': badLocalStorage[i]['course'], 'section': badLocalStorage[i]['section'], 'index': badLocalStorage[i]['index'], 'title':badLocalStorage[i]['title']});
@@ -72,27 +68,20 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 		localStorage.setItem("keys", JSON.stringify(goodCourses));
 		localStorage.setItem("previouskeys", JSON.stringify(badCourses));
 
-
-	/*	chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(goodCourses)}, function(response){});
-		chrome.extension.sendMessage({method: "setPreviousLocalStorage", data: JSON.stringify(badCourses)}, function(response){});	*/
-
 		/**
 	 	 * AJAX call to Old Scarf Labs API to re-add a "watch" on a course
 	 	 * @returns {JSON}
 		 */
-		//console.log(watchid);
 		$.ajax({
 			type: "POST",
 			url: "https://oldscarflabs.me/coursewatcher/readdSnipe.php",
 			data: postData,
 			success: function(data){
-				console.log(postData);
 				$("." + watchid).replaceWith("<div><img src='../../icons/checkmark.png' id='addwatch' height='15px'></div>");
-				//successHandler(data);
 			},
 			error: function(data){
-				//console.log('POST to Old Scarf Lab API failed with data response:');
-				//console.log(data);
+				console.log('POST to Old Scarf Lab API failed with data response:');
+				console.log(data);
 			}
 		});
 

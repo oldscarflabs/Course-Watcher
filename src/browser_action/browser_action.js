@@ -184,7 +184,6 @@ function displayCourses(){
 				url: 'https://oldscarflabs.me/coursewatcher/syncStatus.php',
 				data: ids,
 				success: function(data){
-					console.log(ids);
 					deleteFromLocalStorage(data);
 				},
 				error: function(data){
@@ -202,7 +201,6 @@ $(document).on('click', '.garbage', function(){
 			* AJAX call to Old Scarf Labs API to delete a "watch" on a course
 			* @returns {JSON}
 		*/
-		console.log($(this).attr('watch_id'));
 		var postData = {"watch_id": $(this).attr('watch_id')};
 		var row = $(this).closest('tr');
 		var watch_id = $(this).attr('watch_id');
