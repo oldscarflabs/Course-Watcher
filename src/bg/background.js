@@ -16,12 +16,7 @@ chrome.tabs.onUpdated.addListener(function() {
  */
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse){
 	if(request.method == "getLocalStorage"){
-		try{
       sendResponse({"keys": localStorage.getItem("keys")});
-    }
-    catch(Exception e){
-      
-    }
 	}
 	else if(request.method == "setLocalStorage"){
 		localStorage.setItem("keys", request.data);
