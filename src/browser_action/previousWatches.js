@@ -20,7 +20,7 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 
 			var courseTitle=course['title'];
 
-			var semester = '92014';
+			var semester = '12015';
 			var campus = 'NB';
 			var level = 'U'	;
 
@@ -87,7 +87,7 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 			data: postData,
 			success: function(data){
 				console.log(postData);
-				$("." + watchid).replaceWith("<div><img src='../../checkmark.png' id='addwatch' height='15px'></div>");
+				$("." + watchid).replaceWith("<div><img src='../../icons/checkmark.png' id='addwatch' height='15px'></div>");
 				//successHandler(data);
 			},
 			error: function(data){
