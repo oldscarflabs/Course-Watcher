@@ -66,13 +66,9 @@ function deleteFromLocalStorage(data){
 			for(var i = 0; i < courses2.length; i++){
 				if(badIds.indexOf(String(courses2[i]['watch_id'])) == -1) {
 					goodCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'], 'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title':courses2[i]['title']});
-					//goodCourses['keys'].push(courses2[i]);
 				}
 				else{
 					badCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'], 'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title':courses2[i]['title']});
-					//badCourses['keys'].push(coruses2[i]);
-					//$('.').html('You have been emailed about this class. To undo, press here.');
-
 				}
 			}
 			chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(goodCourses)}, function(response){});
@@ -172,6 +168,7 @@ $(document).on('click', '.garbage', function(){
 		console.log($(this).attr('watch_id'));
 		var postData = {"watch_id": $(this).attr('watch_id')};
 		var row = $(this).closest('tr');
+		var watch_id = $(this).attr('watch_id');
 
 		$.ajax({
 			type: "POST",
@@ -185,6 +182,7 @@ $(document).on('click', '.garbage', function(){
 				row.find('.open-box').attr("class", "delete-box");
 				row.find('.number').css("display", "inline");
 				row.find('.register').css("display", "none");
+				deleteFromLocalStorage({"delete-ids": [{"watch_number": watch_id}]});
 			},
 			error: function(data){
 				console.log('POST to Old Scarf Lab API failed with data response:');
