@@ -40,7 +40,7 @@ function successHandler(data, url){
 
 	$('.register_'+ department + "_" + courseNumber + "_" + sectionNumber).on('click',function(){
 		var index = $('.register_'+ department + "_" + courseNumber + "_" + sectionNumber).attr('id');
-		var theUrl = "https://sims.rutgers.edu/webreg/editSchedule.htm?login=cas&semesterSelection=92014&indexList=" + index;
+		var theUrl = "https://sims.rutgers.edu/webreg/editSchedule.htm?login=cas&semesterSelection=12015&indexList=" + index;
 		chrome.tabs.create({url: theUrl});
 	});
 }
@@ -52,8 +52,6 @@ function successHandler(data, url){
 function deleteFromLocalStorage(data){
 	var goodCourses = {"keys": []};
 	var badCourses = {"keys": []};
-
-  console.log(data);
 
 	chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(responseA){
 		if(responseA.previouskeys != null){
@@ -80,6 +78,28 @@ function deleteFromLocalStorage(data){
 	});
 }
 
+function nothingThere(addBack){
+
+  var appendRow =  "<tr><td colspan='2'>Add a course to watch at <br> the <a href = '#' class='soc'>schedule of classes.</a></td></tr>";
+
+  $('.course-table').append(appendRow);
+
+  if(!addBack){
+    $('.course-table').append('<tr><td style="text-align:right"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></td></tr>');
+  }
+  else{
+    $('.course-table').append('<tr> <td style = "text-align: left"> <a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"> <td style="text-align:right"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></td></tr>');
+  }
+
+
+  $(".soc").on("click", function(){
+
+    chrome.tabs.create({url: "https://sis.rutgers.edu/soc/#subjects%3Fsemester%3D12015%26campus%3DNB%26level%3DU"});
+    return false;
+  });
+
+  return;
+}
 
 /**
  * Displays list of courses in the dialog dropdown
@@ -87,12 +107,26 @@ function deleteFromLocalStorage(data){
  */
 function displayCourses(){
 	var localKeys;
+  var atLeastOne = false;
 
 	chrome.extension.sendMessage({method: "getLocalStorage"}, function(response){
 		var listOfIds = [];
 		localKeys = response.keys;
 		localKeys = JSON.parse(localKeys);
+
+    if(localKeys == null){
+      nothingThere(false);
+      return;
+    }
+
 		var subKeys = localKeys['keys'];
+
+    if(subKeys.length == 0){
+      nothingThere(true);
+      return;
+    }
+
+
 
 		for(var i = 0; i < subKeys.length; i++){
 			var course = subKeys[i];
@@ -100,7 +134,7 @@ function displayCourses(){
 			var courseNumber = course['course'];
 			var section = course['section'];
 			var index = course['index'];
-			var semester = '92014';
+			var semester = '12015';
 			var campus = 'NB';
 			var level = 'U'	;
 			var courseTitle = course['title'];
