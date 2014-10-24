@@ -95,8 +95,8 @@ function sectionsHaveLoaded(){
 				successHandler(data);
 			},
 			error: function(data){
-				('POST to Old Scarf Lab API failed with data response:');
-				(data);
+				console.log('POST to Old Scarf Lab API failed with data response:');
+				console.log(data);
 				alert("Something went wrong. Sorry! Please refresh the page and try again.");
 			}
 		});
