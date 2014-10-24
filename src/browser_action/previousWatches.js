@@ -32,7 +32,10 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 			+"</td><td><div id='addwatch' clickFun = 'clickFun' class='"+ course['watch_id'] +"' style='cursor:pointer' ><img src='../../icons/eyecon.png' id='addwatch' height='10px'></div></td></tr>";
 
 			$('.course-table').append(appendRow);
+
 		}
+
+	$('.course-table').append('<tr> <td colspan="2" style = "text-align: center">Previous Watches <td style="text-align:right"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></td><td></td></tr>');
 
 
 	$('[clickFun=clickFun]').on('click', function(){
