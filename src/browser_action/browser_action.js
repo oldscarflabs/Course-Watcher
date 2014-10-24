@@ -53,6 +53,8 @@ function deleteFromLocalStorage(data){
 	var goodCourses = {"keys": []};
 	var badCourses = {"keys": []};
 
+  console.log(data);
+
 	chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(responseA){
 		if(responseA.previouskeys != null){
 			badCourses = JSON.parse(responseA.previouskeys);
@@ -73,6 +75,7 @@ function deleteFromLocalStorage(data){
 			}
 			chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(goodCourses)}, function(response){});
 			chrome.extension.sendMessage({method: "setPreviousLocalStorage", data: JSON.stringify(badCourses)}, function(response){});
+
 		});
 	});
 }
@@ -182,7 +185,7 @@ $(document).on('click', '.garbage', function(){
 				row.find('.open-box').attr("class", "delete-box");
 				row.find('.number').css("display", "inline");
 				row.find('.register').css("display", "none");
-				deleteFromLocalStorage({"delete-ids": [{"watch_number": watch_id}]});
+				deleteFromLocalStorage({"delete-ids": [watch_id]});
 			},
 			error: function(data){
 				console.log('POST to Old Scarf Lab API failed with data response:');
