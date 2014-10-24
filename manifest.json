@@ -1,6 +1,6 @@
 {
   "name": "Course Watcher",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "author": "Old Scarf Labs",
   "manifest_version": 2,
   "description": "Adds a sniper icon to quickly add a course to be sniped.",
