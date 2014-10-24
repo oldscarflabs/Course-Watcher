@@ -1,0 +1,82 @@
+	html, body{
+		padding: 0px;
+		margin:0px;
+	}
+	#mainPopup {
+		padding: 0px;
+		margin:0px;
+		width: 375px;
+		font-family: Helvetica, Ubuntu, Arial, sans-serif;
+		height:100%;
+	}
+	h1 {
+		font-size: 1.5em;
+		text-align:center;
+	}
+	.open-box{
+		background:green;
+		height: 35px;
+		width: 35px;
+		text-align: center;
+		font-family: helvetica;
+		font-size: 1em;
+		color: white;
+		font-weight: bold;
+		border-left:1px solid black;
+		border-right:1px solid black;
+	}
+	.closed-box{
+		background:red;
+		height: 35px;
+		width: 35px;
+		text-align: center;
+		font-family: helvetica;
+		font-size: 1em;
+		color: white;
+		font-weight: bold;
+		border-left:1px solid black;
+		border-right:1px solid black;
+	}
+	.load-box{
+		background:red;
+		height: 35px;
+		width: 35px;
+		text-align: center;
+		font-family: helvetica;
+		font-size: 1em;
+		color: white;
+		font-weight: bold;
+		border-left:1px solid black;
+		border-right:1px solid black;
+	}
+	.delete-box{
+		height: 35px;
+		width: 35px;
+		text-align: center;
+		font-family: helvetica;
+		font-size: 1em;
+		color: #757575;
+		font-weight: bold;
+		border-left:1px solid black;
+		border-right:1px solid #757575;
+	}
+	table, tr, td{
+		text-align: center;
+		border: none;
+		border-collapse: collapse;
+	}
+	tr:nth-child(even) {background: #e0e0e0}
+	tr:nth-child(odd) {background: #b5b5b5}
+	table {
+   	 	width: 100%;
+    	border-collapse: separate; /* Not really necessary unless you use normalize.js */
+    	border-spacing: 0px; /* take out spaces between cells */
+	}
+
+	td {
+		border-top: 1px solid black;
+		border-bottom: 1px solid black; /* move spacing to the cell */
+	}
+	.garbage{
+		border-right:1px solid black;
+	}
