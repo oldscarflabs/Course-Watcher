@@ -108,11 +108,11 @@ function displayCourses(){
 			listOfIds.push(course['watch_id']);
 
 			var appendRow =  "<tr><td id = '" + department + "_" + courseNumber + "_" + section + "' class='load-box'>" + "<div id='loadingGif"+department +
-			"_" + courseNumber + "_" + section+"'> <img src='http://www.mytreedb.com/uploads/mytreedb/loader/ajax_loader_gray_512.gif' height='30px'> </div><div id='sectionNumber" +department +
+			"_" + courseNumber + "_" + section+"'> <img src='../../icons/spinning_wheel.gif' height='30px'> </div><div id='sectionNumber" +department +
 			"_" + courseNumber + "_" + section+ "' style='display:none;'>" + section + "</div>" + "</td><td id='className'><div>" +
 			courseTitle + "</div></td><td> <div id='number_"+ department + "_" + courseNumber + "_" + section +"' class='number'>"
 			+ department + ":" + courseNumber + "</div> <div id='register_" + department + "_" + courseNumber + "_" + section + "' class='register' style='display:none'><a class='register_"+ department + "_" + courseNumber + "_" + section +"' href='#' id='"+index+"'>REGISTER!</a></div>"
-			 +"</td><td class='garbage' watch_id='" + course['watch_id'] + "'><img src='http://png.findicons.com/files/icons/1580/devine_icons_part_2/128/trash_recyclebin_empty_closed.png' height='20px'></td></tr>";
+			 +"</td><td class='garbage' watch_id='" + course['watch_id'] + "'><img src='../../icons/garbage_can.png' height='20px'></td></tr>";
 
 			$('.course-table').append(appendRow);
 
@@ -185,6 +185,7 @@ $(document).on('click', '.garbage', function(){
 				row.find('.open-box').attr("class", "delete-box");
 				row.find('.number').css("display", "inline");
 				row.find('.register').css("display", "none");
+        row.find('.garbage').html("<img src='../../icons/checkmark.png' height='15px'>");
 				deleteFromLocalStorage({"delete-ids": [watch_id]});
 			},
 			error: function(data){

@@ -87,7 +87,7 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 			data: postData,
 			success: function(data){
 				console.log(postData);
-				$("." + watchid).replaceWith("<div><img src='http://img1.wikia.nocookie.net/__cb20131125154354/roblox/images/5/57/Very-Basic-Checkmark-icon.png' id='addwatch' height='15px'></div>");
+				$("." + watchid).replaceWith("<div><img src='../../checkmark.png' id='addwatch' height='15px'></div>");
 				//successHandler(data);
 			},
 			error: function(data){
