@@ -164,8 +164,8 @@ function displayCourses(){
 					successHandler(data, this.url);
 				},
 				error: function(data){
-					console.log('AJAX GET request to Rutgers API has failed with data:');
-					console.log(data);
+					('AJAX GET request to Rutgers API has failed with data:');
+					(data);
 				}
 			});
 
@@ -184,12 +184,12 @@ function displayCourses(){
 				url: 'https://oldscarflabs.me/coursewatcher/syncStatus.php',
 				data: ids,
 				success: function(data){
-					console.log(ids);
+					(ids);
 					deleteFromLocalStorage(data);
 				},
 				error: function(data){
-					console.log('GET from Old Scarf Labs API has failed with response:');
-					console.log(data);
+					('GET from Old Scarf Labs API has failed with response:');
+					(data);
 			}
 		});
 	});
@@ -202,7 +202,7 @@ $(document).on('click', '.garbage', function(){
 			* AJAX call to Old Scarf Labs API to delete a "watch" on a course
 			* @returns {JSON}
 		*/
-		console.log($(this).attr('watch_id'));
+		($(this).attr('watch_id'));
 		var postData = {"watch_id": $(this).attr('watch_id')};
 		var row = $(this).closest('tr');
 		var watch_id = $(this).attr('watch_id');
@@ -223,8 +223,8 @@ $(document).on('click', '.garbage', function(){
 				deleteFromLocalStorage({"delete-ids": [watch_id]});
 			},
 			error: function(data){
-				console.log('POST to Old Scarf Lab API failed with data response:');
-				console.log(data);
+				('POST to Old Scarf Lab API failed with data response:');
+				(data);
 			}
 		});
 });
