@@ -85,10 +85,10 @@ function nothingThere(addBack){
   $('.course-table').append(appendRow);
 
   if(!addBack){
-    $('.course-table').append('<tr><td style="text-align:right"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></td></tr>');
+    $('.course-table').append('<tr><td style="text-align:right"><a href = "home.html"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></a></td></tr>');
   }
   else{
-    $('.course-table').append('<tr> <td style = "text-align: left"> <a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"> <td style="text-align:right"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></td></tr>');
+    $('.course-table').append('<tr> <td style = "text-align: left"> <a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"> <td style="text-align:right"><a href = "home.html"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></a></td></tr>');
   }
 
 
@@ -171,7 +171,7 @@ function displayCourses(){
 
 		}
 
-		$('.course-table').append('<tr><td><a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"></a></td><td></td><td colspan="2" style="text-align:left"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></td></tr>');
+		$('.course-table').append('<tr><td><a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"></a></td><td></td><td colspan="2" style="text-align:left"><a href = "home.html"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></a></td></tr>');
 
 		var ids = {'watch-ids': JSON.stringify(listOfIds)}; //checks to see if the courses have been marked as watched in database
 

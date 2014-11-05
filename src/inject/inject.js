@@ -81,6 +81,15 @@ function sectionsHaveLoaded(){
 
 		var postData = {"DepartmentNumber": departmentNum,  "CourseNumber": courseNum,  "Email":email, "SectionNumber": sectionNumber, "Index": index, "Title" : title};
 
+		if(email == ""){
+			alert("Don't forget to put an email!");
+			return;
+		}
+		if(email.indexOf("@") == -1 || email.length <= 3 || email.indexOf(".") == -1){
+			alert("Something seems wrong with your email. Please check it again.");
+			return;
+		}
+
 		localStorage.setItem("email",email);
 
 		/**
