@@ -65,10 +65,12 @@ function deleteFromLocalStorage(data){
 
 			for(var i = 0; i < courses2.length; i++){
 				if(badIds.indexOf(String(courses2[i]['watch_id'])) == -1) {
-					goodCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'], 'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title':courses2[i]['title']});
+					goodCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'],
+					'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title': courses2[i]['title'], 'authentication':courses2[i]['authentication'] });
 				}
 				else{
-					badCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'], 'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title':courses2[i]['title']});
+					badCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'],
+					'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title':courses2[i]['title'], 'authentication':courses2[i]['authentication']});
 				}
 			}
 			chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(goodCourses)}, function(response){});
@@ -146,7 +148,7 @@ function displayCourses(){
 			"_" + courseNumber + "_" + section+ "' style='display:none;'>" + section + "</div>" + "</td><td id='className'><div>" +
 			courseTitle + "</div></td><td> <div id='number_"+ department + "_" + courseNumber + "_" + section +"' class='number'>"
 			+ department + ":" + courseNumber + "</div> <div id='register_" + department + "_" + courseNumber + "_" + section + "' class='register' style='display:none'><a class='register_"+ department + "_" + courseNumber + "_" + section +"' href='#' id='"+index+"'>REGISTER!</a></div>"
-			 +"</td><td class='garbage' watch_id='" + course['watch_id'] + "'><img src='../../icons/garbage_can.png' height='20px'></td></tr>";
+			 +"</td><td class='garbage' watch_id='" + course['watch_id'] + "' authentication='"+course['authentication']+"'><img src='../../icons/garbage_can.png' height='20px'></td></tr>";
 
 			$('.course-table').append(appendRow);
 
@@ -181,7 +183,7 @@ function displayCourses(){
 		 */
 		$.ajax({
 				type: "GET",
-				url: 'https://oldscarflabs.me/coursewatcher/syncStatus.php',
+				url: 'https://oldscarflabs.me/coursewatcher_dev/syncStatus.php',
 				data: ids,
 				success: function(data){
 					deleteFromLocalStorage(data);
@@ -201,13 +203,13 @@ $(document).on('click', '.garbage', function(){
 			* AJAX call to Old Scarf Labs API to delete a "watch" on a course
 			* @returns {JSON}
 		*/
-		var postData = {"watch_id": $(this).attr('watch_id')};
+		var postData = {"watch_id": $(this).attr('watch_id'), "authentication": $(this).attr('authentication')};
 		var row = $(this).closest('tr');
 		var watch_id = $(this).attr('watch_id');
 
 		$.ajax({
 			type: "POST",
-			url: "https://oldscarflabs.me/coursewatcher/removeSnipe.php",
+			url: "https://oldscarflabs.me/coursewatcher_dev/removeSnipe.php",
 			data: postData,
 			success: function(data){
 				row.css("background", "");
