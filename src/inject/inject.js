@@ -22,7 +22,7 @@ function successHandler(data){
 			localKeys = JSON.parse(localKeys);
 		}
 
-		localKeys['keys'].push({'watch_id': data['watch_id'], 'department': data['department'], 'course': data['course'], 'section': data['section'], 'index': data['index'], 'title':data['title'], 'authentication':data['authentication']});
+		localKeys['keys'].push({'watch_id': data['watch_id'], 'department': data['department'], 'course': data['course'], 'section': data['section'], 'index': data['index'], 'title':data['title'], 'authentication':data['authentication'], 'campus':data['campus']});
 		chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(localKeys)}, function(response){});
 	});
 }
@@ -78,11 +78,12 @@ function sectionsHaveLoaded(){
 		var courseNum = deptAndCourseNums[2];
 		var index = snipe.prev().text();
 		var title = snipe.closest('.courseData').siblings('.courseInfo').children('.courseTitleAndCredits').children('.courseTitle').children('.highlighttext').text();
-
+		var campus = $('.campus').text()
+		console.log(campus);
 		//Put index and title into temp
 		//local storage while waiting for response.
 		//Or maybe even keep in global variable?
-		var postData = {"DepartmentNumber": departmentNum,  "CourseNumber": courseNum,  "Email":email, "SectionNumber": sectionNumber, "Index": index, "Title" : title};
+		var postData = {"DepartmentNumber": departmentNum,  "CourseNumber": courseNum,  "Email": email, "SectionNumber": sectionNumber, "Index": index, "Title": title, "Campus": campus};
 
 		if(email == ""){
 			alert("Don't forget to put an email!");
@@ -94,7 +95,7 @@ function sectionsHaveLoaded(){
 		}
 
 		//put this in Local Storage and then update auth and watchid
-		var tempLocalStroage = {"watch_id":0,"department":departmentNum,"course":courseNum,"section":sectionNumber,"index":index,"title":title,"authentication":""};
+		var tempLocalStroage = {"watch_id":0,"department":departmentNum,"course":courseNum,"section":sectionNumber,"index":index,"title":title,"authentication":"", "campus":campus};
 
 		localStorage.setItem("email",email);
 
