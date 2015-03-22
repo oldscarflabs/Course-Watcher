@@ -16,7 +16,7 @@
   },
   "browser_action": {
     "default_icon": "icons/icon48.png",
-    "default_title": "page action demo",
+    "default_title": "Rutgers Course Watcher",
     "default_popup": "src/browser_action/browser_action.html"
   },
   "permissions": [
