@@ -173,9 +173,14 @@ function displayCourses(){
 
 		}
 
-		$('.course-table').append('<tr><td><a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"></a></td><td></td><td colspan="2" style="text-align:left"><a href = "home.html"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></a></td></tr>');
+		$('.course-table').append('<tr><td><a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"></a></td><td><a class="soc" href="url">Add Another Class! </a></td><td colspan="2" style="text-align:left"><a href = "home.html"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></a></td></tr>');
 
 		var ids = {'watch-ids': JSON.stringify(listOfIds)}; //checks to see if the courses have been marked as watched in database
+
+		  $(".soc").on("click", function(){
+		  	chrome.tabs.create({url: "https://sis.rutgers.edu/soc/"});
+			return false;
+		  });
 
 		/**
 		 * Ajax GET request to Old Scarf Labs API to sync the status of each course being watched
