@@ -79,6 +79,9 @@ function sectionsHaveLoaded(){
 		var index = snipe.prev().text();
 		var title = snipe.closest('.courseData').siblings('.courseInfo').children('.courseTitleAndCredits').children('.courseTitle').children('.highlighttext').text();
 
+		//Put index and title into temp
+		//local storage while waiting for response.
+		//Or maybe even keep in global variable?
 		var postData = {"DepartmentNumber": departmentNum,  "CourseNumber": courseNum,  "Email":email, "SectionNumber": sectionNumber, "Index": index, "Title" : title};
 
 		if(email == ""){
@@ -89,6 +92,9 @@ function sectionsHaveLoaded(){
 			alert("Something seems wrong with your email. Please check it again.");
 			return;
 		}
+
+		//put this in Local Storage and then update auth and watchid
+		var tempLocalStroage = {"watch_id":0,"department":departmentNum,"course":courseNum,"section":sectionNumber,"index":index,"title":title,"authentication":""};
 
 		localStorage.setItem("email",email);
 
@@ -109,9 +115,13 @@ function sectionsHaveLoaded(){
 				alert("Something went wrong. Sorry! Please refresh the page and try again.");
 			}
 		});
-
-		var changeTooltip = tooltips[parseInt(number)];
-		changeTooltip.tooltipster('content', 'You are watching this course!');
+		try{
+			var changeTooltip = tooltips[parseInt(number)];
+			changeTooltip.tooltipster('content', 'You are watching this course!');
+		}
+		catch(e){
+			alert("You are successfully watching this course!");
+		}
 	});
 	/*$('.input').keypress(function(e) {
     	if(e.which == 13) {
@@ -119,22 +129,6 @@ function sectionsHaveLoaded(){
         	jQuery('#submit').focus().click();
     	}
 	});*/
-}
-
-
-
-/**
- * Checks for a change of department
- * Sets an 0.01 second interval to check for loaded sections
- * @return {void}
-*/
-window.onhashchange = function () {
-	setInterval(function() {
-		if($("#numCoursesFoundDivSpan").length > 0){
-			sectionsHaveLoaded();
-			return;
-		}
-	},10);
 }
 
 /**
