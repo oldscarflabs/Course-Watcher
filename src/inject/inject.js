@@ -22,7 +22,7 @@ function successHandler(data){
 			localKeys = JSON.parse(localKeys);
 		}
 
-		localKeys['keys'].push({'watch_id': data['watch_id'], 'department': data['department'], 'course': data['course'], 'section': data['section'], 'index': data['index'], 'title':data['title']});
+		localKeys['keys'].push({'watch_id': data['watch_id'], 'department': data['department'], 'course': data['course'], 'section': data['section'], 'index': data['index'], 'title':data['title'], 'authentication':data['authentication']});
 		chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(localKeys)}, function(response){});
 	});
 }
@@ -81,6 +81,15 @@ function sectionsHaveLoaded(){
 
 		var postData = {"DepartmentNumber": departmentNum,  "CourseNumber": courseNum,  "Email":email, "SectionNumber": sectionNumber, "Index": index, "Title" : title};
 
+		if(email == ""){
+			alert("Don't forget to put an email!");
+			return;
+		}
+		if(email.indexOf("@") == -1 || email.length <= 3 || email.indexOf(".") == -1){
+			alert("Something seems wrong with your email. Please check it again.");
+			return;
+		}
+
 		localStorage.setItem("email",email);
 
 		/**
@@ -89,7 +98,7 @@ function sectionsHaveLoaded(){
 		 */
 		$.ajax({
 			type: "POST",
-			url: "https://oldscarflabs.me/coursewatcher/addSnipe.php",
+			url: "https://oldscarflabs.me/coursewatcher_dev/addSnipe.php",
 			data: postData,
 			success: function(data){
 				successHandler(data);
