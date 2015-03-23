@@ -234,4 +234,59 @@ $(document).on('click', '.garbage', function(){
 		});
 });
 
+function clearLastSemester(){
+	var currentSemester = 92015; //change this each semester
+	var localSemester = localStorage.getItem("currentSemester");
+	if(localSemester == null || localSemester != currentSemester){
+		localStorage.setItem("keys", '{"keys":[]}');
+		localStorage.setItem("previouskeys", '{"keys":[]}');
+		localStorage.setItem("currentSemester", currentSemester);
+	}
+}
+
+function parseAlerts(data){
+	var alertsShown = localStorage.getItem("alertsShown");
+	if(alertsShown == null){
+		alertsShown = [];
+		alertsShown = JSON.stringify(alertsShown);
+	}
+
+	alertNumsShown =  JSON.parse(alertsShown);
+
+	var alerts = data.alerts;
+	for(var i = 0; i < alerts.length; i++){
+		var alertO = alerts[i];
+		var number = alertO.Number;
+		if(!alertO.Effective){
+			continue;
+		}
+		if(alertNumsShown.indexOf(number) == -1){
+			alert(alertO.Message);
+			alertNumsShown.push(number);
+		}
+	}
+	localStorage.setItem("alertsShown", JSON.stringify(alertNumsShown));
+
+}
+
+function checkForAlert(){
+	$.ajax({
+		type: 'GET',
+		datatype: 'json',
+		url: 'https://oldscarflabs.me/coursewatcher/alerts.json',
+		success: function(data){
+			parseAlerts(data);
+		},
+		error: function(data){
+			console.log('AJAX GET request to OSL Alerts Feed has failed with data:');
+			console.log(data);
+		}
+	});
+}
+
+
+clearLastSemester();
 displayCourses();
+checkForAlert();
+
+
