@@ -12,7 +12,7 @@ function successHandler(data, url){
 	var department = data[0]['subject'];
 	var course;
 
-	for(var i =0; i < data.length; i++){
+	for(var i = 0; i < data.length; i++){
 		course = data[i];
 		if(course['courseNumber'] == courseNumber){
 			break;
@@ -20,7 +20,7 @@ function successHandler(data, url){
 	}
 
 	var sections = course['sections'];
-	for(var j = 0; j< sections.length; j++){
+	for(var j = 0; j < sections.length; j++){
 		section = sections[j];
 		if(section['number'] == sectionNumber){
 			break;
@@ -109,24 +109,24 @@ function nothingThere(addBack){
  */
 function displayCourses(){
 	var localKeys;
-  var atLeastOne = false;
+  	var atLeastOne = false;
 
 	chrome.extension.sendMessage({method: "getLocalStorage"}, function(response){
 		var listOfIds = [];
 		localKeys = response.keys;
 		localKeys = JSON.parse(localKeys);
 
-    if(localKeys == null){
-      nothingThere(false);
-      return;
-    }
+	    if(localKeys == null){
+	      nothingThere(false);
+	      return;
+	    }
 
-		var subKeys = localKeys['keys'];
+			var subKeys = localKeys['keys'];
 
-    if(subKeys.length == 0){
-      nothingThere(true);
-      return;
-    }
+	    if(subKeys.length == 0){
+	      nothingThere(true);
+	      return;
+	    }
 
 
 
@@ -163,7 +163,7 @@ function displayCourses(){
 				url: 'http://sis.rutgers.edu/soc/courses.json',
 				data: requestData,
 				success: function(data){
-					successHandler(data, this.url);
+					successHandler(JSON.parse(data), this.url);
 				},
 				error: function(data){
 					console.log('AJAX GET request to Rutgers API has failed with data:');
@@ -173,9 +173,14 @@ function displayCourses(){
 
 		}
 
-		$('.course-table').append('<tr><td><a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"></a></td><td></td><td colspan="2" style="text-align:left"><a href = "home.html"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></a></td></tr>');
+		$('.course-table').append('<tr><td><a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"></a></td><td><a class="soc" href="url">Add Another Class! </a></td><td colspan="2" style="text-align:left"><a href = "home.html"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></a></td></tr>');
 
 		var ids = {'watch-ids': JSON.stringify(listOfIds)}; //checks to see if the courses have been marked as watched in database
+
+		  $(".soc").on("click", function(){
+		  	chrome.tabs.create({url: "https://sis.rutgers.edu/soc/"});
+			return false;
+		  });
 
 		/**
 		 * Ajax GET request to Old Scarf Labs API to sync the status of each course being watched
