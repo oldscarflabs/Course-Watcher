@@ -20,7 +20,7 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 
 			var courseTitle=course['title'];
 
-			var semester = '12015';
+			var semester = '92015';
 			var campus = 'NB';
 			var level = 'U'	;
 
@@ -79,7 +79,7 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 		 */
 		$.ajax({
 			type: "POST",
-			url: "https://oldscarflabs.me/coursewatcher_dev/readdSnipe.php",
+			url: "https://oldscarflabs.me/coursewatcher/readdSnipe.php",
 			data: postData,
 			success: function(data){
 				$("." + watchid).replaceWith("<div><img src='../../icons/checkmark.png' id='addwatch' height='15px'></div>");

@@ -105,7 +105,7 @@ function sectionsHaveLoaded(){
 		 */
 		$.ajax({
 			type: "POST",
-			url: "https://oldscarflabs.me/coursewatcher_dev/addSnipe.php",
+			url: "https://oldscarflabs.me/coursewatcher/addSnipe.php",
 			data: postData,
 			success: function(data){
 				successHandler(data);
@@ -143,3 +143,17 @@ var p = setInterval(function() {
 			return;
 	}
 },10);
+
+function clearLastSemester(){
+	var currentSemester = 92015; //change this each semester
+	var localSemester = localStorage.getItem("currentSemester");
+	if(localSemester == null || localSemester != currentSemester){
+		localStorage.setItem("currentSemester", currentSemester);
+		chrome.extension.sendMessage({method: "clearLocalStorage"}, function(response){
+		});
+	}
+}
+
+clearLastSemester();
+
+

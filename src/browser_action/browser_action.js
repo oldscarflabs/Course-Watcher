@@ -40,7 +40,7 @@ function successHandler(data, url){
 
 	$('.register_'+ department + "_" + courseNumber + "_" + sectionNumber).on('click',function(){
 		var index = $('.register_'+ department + "_" + courseNumber + "_" + sectionNumber).attr('id');
-		var theUrl = "https://sims.rutgers.edu/webreg/editSchedule.htm?login=cas&semesterSelection=12015&indexList=" + index;
+		var theUrl = "https://sims.rutgers.edu/webreg/editSchedule.htm?login=cas&semesterSelection=92015&indexList=" + index;
 		chrome.tabs.create({url: theUrl});
 	});
 }
@@ -96,7 +96,7 @@ function nothingThere(addBack){
 
   $(".soc").on("click", function(){
 
-    chrome.tabs.create({url: "https://sis.rutgers.edu/soc/#subjects%3Fsemester%3D12015%26campus%3DNB%26level%3DU"});
+    chrome.tabs.create({url: "https://sis.rutgers.edu/soc/#subjects%3Fsemester%3D92015%26campus%3DNB%26level%3DU"});
     return false;
   });
 
@@ -136,7 +136,7 @@ function displayCourses(){
 			var courseNumber = course['course'];
 			var section = course['section'];
 			var index = course['index'];
-			var semester = '12015';
+			var semester = '92015';
 			var campus = 'NB';
 			var level = 'U'	;
 			var courseTitle = course['title'];
@@ -188,7 +188,7 @@ function displayCourses(){
 		 */
 		$.ajax({
 				type: "GET",
-				url: 'https://oldscarflabs.me/coursewatcher_dev/syncStatus.php',
+				url: 'https://oldscarflabs.me/coursewatcher/syncStatus.php',
 				data: ids,
 				success: function(data){
 					deleteFromLocalStorage(data);
@@ -214,7 +214,7 @@ $(document).on('click', '.garbage', function(){
 
 		$.ajax({
 			type: "POST",
-			url: "https://oldscarflabs.me/coursewatcher_dev/removeSnipe.php",
+			url: "https://oldscarflabs.me/coursewatcher/removeSnipe.php",
 			data: postData,
 			success: function(data){
 				row.css("background", "");
@@ -233,16 +233,6 @@ $(document).on('click', '.garbage', function(){
 			}
 		});
 });
-
-function clearLastSemester(){
-	var currentSemester = 92015; //change this each semester
-	var localSemester = localStorage.getItem("currentSemester");
-	if(localSemester == null || localSemester != currentSemester){
-		localStorage.setItem("keys", '{"keys":[]}');
-		localStorage.setItem("previouskeys", '{"keys":[]}');
-		localStorage.setItem("currentSemester", currentSemester);
-	}
-}
 
 function parseAlerts(data){
 	var alertsShown = localStorage.getItem("alertsShown");
@@ -285,7 +275,6 @@ function checkForAlert(){
 }
 
 
-clearLastSemester();
 displayCourses();
 checkForAlert();
 
