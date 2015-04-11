@@ -20,7 +20,7 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 
 			var courseTitle=course['title'];
 
-			var semester = '12015';
+			var semester = '92015';
 			var campus = 'NB';
 			var level = 'U'	;
 
@@ -59,11 +59,13 @@ chrome.extension.sendMessage({method: "getPreviousLocalStorage"}, function(respo
 
 		for(var i = 0; i < badLocalStorage.length; i++){
 			if(badLocalStorage[i]['watch_id'] == $(this).attr('class')) {
-				goodCourses['keys'].push({'watch_id': badLocalStorage[i]['watch_id'], 'department': badLocalStorage[i]['department'], 'course': badLocalStorage[i]['course'], 'section': badLocalStorage[i]['section'], 'index': badLocalStorage[i]['index'], 'title':badLocalStorage[i]['title']});
-				postData = {"watch_id": badLocalStorage[i]['watch_id']};
+				goodCourses['keys'].push({'watch_id': badLocalStorage[i]['watch_id'], 'department': badLocalStorage[i]['department'], 'course': badLocalStorage[i]['course'],
+				 'section': badLocalStorage[i]['section'], 'index': badLocalStorage[i]['index'], 'title':badLocalStorage[i]['title'], 'authentication':badLocalStorage[i]['authentication']});
+				postData = {"watch_id": badLocalStorage[i]['watch_id'], "authentication": badLocalStorage[i]['authentication']};
 			}
 			else{
-				badCourses['keys'].push({'watch_id': badLocalStorage[i]['watch_id'], 'department': badLocalStorage[i]['department'], 'course': badLocalStorage[i]['course'], 'section': badLocalStorage[i]['section'], 'index': badLocalStorage[i]['index'], 'title':badLocalStorage[i]['title']});
+				badCourses['keys'].push({'watch_id': badLocalStorage[i]['watch_id'], 'department': badLocalStorage[i]['department'], 'course': badLocalStorage[i]['course'],
+				'section': badLocalStorage[i]['section'], 'index': badLocalStorage[i]['index'], 'title':badLocalStorage[i]['title'], 'authentication':badLocalStorage[i]['authentication']});
 			}
 		}
 

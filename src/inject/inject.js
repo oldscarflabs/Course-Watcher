@@ -22,7 +22,7 @@ function successHandler(data){
 			localKeys = JSON.parse(localKeys);
 		}
 
-		localKeys['keys'].push({'watch_id': data['watch_id'], 'department': data['department'], 'course': data['course'], 'section': data['section'], 'index': data['index'], 'title':data['title']});
+		localKeys['keys'].push({'watch_id': data['watch_id'], 'department': data['department'], 'course': data['course'], 'section': data['section'], 'index': data['index'], 'title':data['title'], 'authentication':data['authentication'], 'campus':data['campus']});
 		chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(localKeys)}, function(response){});
 	});
 }
@@ -78,8 +78,12 @@ function sectionsHaveLoaded(){
 		var courseNum = deptAndCourseNums[2];
 		var index = snipe.prev().text();
 		var title = snipe.closest('.courseData').siblings('.courseInfo').children('.courseTitleAndCredits').children('.courseTitle').children('.highlighttext').text();
-
-		var postData = {"DepartmentNumber": departmentNum,  "CourseNumber": courseNum,  "Email":email, "SectionNumber": sectionNumber, "Index": index, "Title" : title};
+		var campus = $('.campus').text()
+		console.log(campus);
+		//Put index and title into temp
+		//local storage while waiting for response.
+		//Or maybe even keep in global variable?
+		var postData = {"DepartmentNumber": departmentNum,  "CourseNumber": courseNum,  "Email": email, "SectionNumber": sectionNumber, "Index": index, "Title": title, "Campus": campus};
 
 		if(email == ""){
 			alert("Don't forget to put an email!");
@@ -89,6 +93,9 @@ function sectionsHaveLoaded(){
 			alert("Something seems wrong with your email. Please check it again.");
 			return;
 		}
+
+		//put this in Local Storage and then update auth and watchid
+		var tempLocalStroage = {"watch_id":0,"department":departmentNum,"course":courseNum,"section":sectionNumber,"index":index,"title":title,"authentication":"", "campus":campus};
 
 		localStorage.setItem("email",email);
 
@@ -109,9 +116,13 @@ function sectionsHaveLoaded(){
 				alert("Something went wrong. Sorry! Please refresh the page and try again.");
 			}
 		});
-
-		var changeTooltip = tooltips[parseInt(number)];
-		changeTooltip.tooltipster('content', 'You are watching this course!');
+		try{
+			var changeTooltip = tooltips[parseInt(number)];
+			changeTooltip.tooltipster('content', 'You are watching this course!');
+		}
+		catch(e){
+			alert("You are successfully watching this course!");
+		}
 	});
 	/*$('.input').keypress(function(e) {
     	if(e.which == 13) {
@@ -119,22 +130,6 @@ function sectionsHaveLoaded(){
         	jQuery('#submit').focus().click();
     	}
 	});*/
-}
-
-
-
-/**
- * Checks for a change of department
- * Sets an 0.01 second interval to check for loaded sections
- * @return {void}
-*/
-window.onhashchange = function () {
-	setInterval(function() {
-		if($("#numCoursesFoundDivSpan").length > 0){
-			sectionsHaveLoaded();
-			return;
-		}
-	},10);
 }
 
 /**
@@ -148,3 +143,17 @@ var p = setInterval(function() {
 			return;
 	}
 },10);
+
+function clearLastSemester(){
+	var currentSemester = 92015; //change this each semester
+	var localSemester = localStorage.getItem("currentSemester");
+	if(localSemester == null || localSemester != currentSemester){
+		localStorage.setItem("currentSemester", currentSemester);
+		chrome.extension.sendMessage({method: "clearLocalStorage"}, function(response){
+		});
+	}
+}
+
+clearLastSemester();
+
+

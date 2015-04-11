@@ -1,6 +1,6 @@
 {
   "name": "Rutgers Course Watcher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Old Scarf Labs",
   "manifest_version": 2,
   "description": "Adds an eye logo to quickly watch courses and be notified when they open.",
@@ -16,7 +16,7 @@
   },
   "browser_action": {
     "default_icon": "icons/icon48.png",
-    "default_title": "page action demo",
+    "default_title": "Rutgers Course Watcher",
     "default_popup": "src/browser_action/browser_action.html"
   },
   "permissions": [

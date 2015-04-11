@@ -12,7 +12,7 @@ function successHandler(data, url){
 	var department = data[0]['subject'];
 	var course;
 
-	for(var i =0; i < data.length; i++){
+	for(var i = 0; i < data.length; i++){
 		course = data[i];
 		if(course['courseNumber'] == courseNumber){
 			break;
@@ -20,7 +20,7 @@ function successHandler(data, url){
 	}
 
 	var sections = course['sections'];
-	for(var j = 0; j< sections.length; j++){
+	for(var j = 0; j < sections.length; j++){
 		section = sections[j];
 		if(section['number'] == sectionNumber){
 			break;
@@ -40,7 +40,7 @@ function successHandler(data, url){
 
 	$('.register_'+ department + "_" + courseNumber + "_" + sectionNumber).on('click',function(){
 		var index = $('.register_'+ department + "_" + courseNumber + "_" + sectionNumber).attr('id');
-		var theUrl = "https://sims.rutgers.edu/webreg/editSchedule.htm?login=cas&semesterSelection=12015&indexList=" + index;
+		var theUrl = "https://sims.rutgers.edu/webreg/editSchedule.htm?login=cas&semesterSelection=92015&indexList=" + index;
 		chrome.tabs.create({url: theUrl});
 	});
 }
@@ -65,10 +65,12 @@ function deleteFromLocalStorage(data){
 
 			for(var i = 0; i < courses2.length; i++){
 				if(badIds.indexOf(String(courses2[i]['watch_id'])) == -1) {
-					goodCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'], 'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title':courses2[i]['title']});
+					goodCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'],
+					'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title': courses2[i]['title'], 'authentication':courses2[i]['authentication'] });
 				}
 				else{
-					badCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'], 'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title':courses2[i]['title']});
+					badCourses['keys'].push({'watch_id': courses2[i]['watch_id'], 'department': courses2[i]['department'], 'course': courses2[i]['course'],
+					'section': courses2[i]['section'], 'index': courses2[i]['index'], 'title':courses2[i]['title'], 'authentication':courses2[i]['authentication']});
 				}
 			}
 			chrome.extension.sendMessage({method: "setLocalStorage", data: JSON.stringify(goodCourses)}, function(response){});
@@ -94,7 +96,7 @@ function nothingThere(addBack){
 
   $(".soc").on("click", function(){
 
-    chrome.tabs.create({url: "https://sis.rutgers.edu/soc/#subjects%3Fsemester%3D12015%26campus%3DNB%26level%3DU"});
+    chrome.tabs.create({url: "https://sis.rutgers.edu/soc/#subjects%3Fsemester%3D92015%26campus%3DNB%26level%3DU"});
     return false;
   });
 
@@ -107,24 +109,24 @@ function nothingThere(addBack){
  */
 function displayCourses(){
 	var localKeys;
-  var atLeastOne = false;
+  	var atLeastOne = false;
 
 	chrome.extension.sendMessage({method: "getLocalStorage"}, function(response){
 		var listOfIds = [];
 		localKeys = response.keys;
 		localKeys = JSON.parse(localKeys);
 
-    if(localKeys == null){
-      nothingThere(false);
-      return;
-    }
+	    if(localKeys == null){
+	      nothingThere(false);
+	      return;
+	    }
 
-		var subKeys = localKeys['keys'];
+			var subKeys = localKeys['keys'];
 
-    if(subKeys.length == 0){
-      nothingThere(true);
-      return;
-    }
+	    if(subKeys.length == 0){
+	      nothingThere(true);
+	      return;
+	    }
 
 
 
@@ -134,7 +136,7 @@ function displayCourses(){
 			var courseNumber = course['course'];
 			var section = course['section'];
 			var index = course['index'];
-			var semester = '12015';
+			var semester = '92015';
 			var campus = 'NB';
 			var level = 'U'	;
 			var courseTitle = course['title'];
@@ -146,7 +148,7 @@ function displayCourses(){
 			"_" + courseNumber + "_" + section+ "' style='display:none;'>" + section + "</div>" + "</td><td id='className'><div>" +
 			courseTitle + "</div></td><td> <div id='number_"+ department + "_" + courseNumber + "_" + section +"' class='number'>"
 			+ department + ":" + courseNumber + "</div> <div id='register_" + department + "_" + courseNumber + "_" + section + "' class='register' style='display:none'><a class='register_"+ department + "_" + courseNumber + "_" + section +"' href='#' id='"+index+"'>REGISTER!</a></div>"
-			 +"</td><td class='garbage' watch_id='" + course['watch_id'] + "'><img src='../../icons/garbage_can.png' height='20px'></td></tr>";
+			 +"</td><td class='garbage' watch_id='" + course['watch_id'] + "' authentication='"+course['authentication']+"'><img src='../../icons/garbage_can.png' height='20px'></td></tr>";
 
 			$('.course-table').append(appendRow);
 
@@ -161,7 +163,7 @@ function displayCourses(){
 				url: 'http://sis.rutgers.edu/soc/courses.json',
 				data: requestData,
 				success: function(data){
-					successHandler(data, this.url);
+					successHandler(JSON.parse(data), this.url);
 				},
 				error: function(data){
 					console.log('AJAX GET request to Rutgers API has failed with data:');
@@ -171,9 +173,14 @@ function displayCourses(){
 
 		}
 
-		$('.course-table').append('<tr><td><a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"></a></td><td></td><td colspan="2" style="text-align:left"><a href = "home.html"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></a></td></tr>');
+		$('.course-table').append('<tr><td><a href="previousWatches.html"><img src="../../icons/previous.png" height="18px" style="padding:5px"></a></td><td><a class="soc" href="url">Add Another Class! </a></td><td colspan="2" style="text-align:left"><a href = "home.html"><img src="oldscarflabs.png" height="20px" style="padding:5px;"></a></td></tr>');
 
 		var ids = {'watch-ids': JSON.stringify(listOfIds)}; //checks to see if the courses have been marked as watched in database
+
+		  $(".soc").on("click", function(){
+		  	chrome.tabs.create({url: "https://sis.rutgers.edu/soc/"});
+			return false;
+		  });
 
 		/**
 		 * Ajax GET request to Old Scarf Labs API to sync the status of each course being watched
@@ -201,7 +208,7 @@ $(document).on('click', '.garbage', function(){
 			* AJAX call to Old Scarf Labs API to delete a "watch" on a course
 			* @returns {JSON}
 		*/
-		var postData = {"watch_id": $(this).attr('watch_id')};
+		var postData = {"watch_id": $(this).attr('watch_id'), "authentication": $(this).attr('authentication')};
 		var row = $(this).closest('tr');
 		var watch_id = $(this).attr('watch_id');
 
@@ -227,4 +234,48 @@ $(document).on('click', '.garbage', function(){
 		});
 });
 
+function parseAlerts(data){
+	var alertsShown = localStorage.getItem("alertsShown");
+	if(alertsShown == null){
+		alertsShown = [];
+		alertsShown = JSON.stringify(alertsShown);
+	}
+
+	alertNumsShown =  JSON.parse(alertsShown);
+
+	var alerts = data.alerts;
+	for(var i = 0; i < alerts.length; i++){
+		var alertO = alerts[i];
+		var number = alertO.Number;
+		if(!alertO.Effective){
+			continue;
+		}
+		if(alertNumsShown.indexOf(number) == -1){
+			alert(alertO.Message);
+			alertNumsShown.push(number);
+		}
+	}
+	localStorage.setItem("alertsShown", JSON.stringify(alertNumsShown));
+
+}
+
+function checkForAlert(){
+	$.ajax({
+		type: 'GET',
+		datatype: 'json',
+		url: 'https://oldscarflabs.me/coursewatcher/alerts.json',
+		success: function(data){
+			parseAlerts(data);
+		},
+		error: function(data){
+			console.log('AJAX GET request to OSL Alerts Feed has failed with data:');
+			console.log(data);
+		}
+	});
+}
+
+
 displayCourses();
+checkForAlert();
+
+

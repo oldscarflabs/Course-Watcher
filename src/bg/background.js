@@ -27,6 +27,10 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse){
 	else if(request.method == "getPreviousLocalStorage"){
 		sendResponse({"previouskeys": localStorage.getItem("previouskeys")});
 	}
+	else if(request.method == "clearLocalStorage"){
+		localStorage.setItem("keys", '{"keys":[]}');
+		localStorage.setItem("previouskeys", '{"keys":[]}');
+	}
 	else
 		sendResponse({});
 });
